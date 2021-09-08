@@ -24,7 +24,7 @@ class SessionsController extends Controller
         ]);
 
         //验证用户信息
-        if(Auth::attempt($credentials)) {
+        if(Auth::attempt($credentials,$request->has('remember'))) { //第一个参数匹配账号密码，第二个参数保持登录状态
             //登录成功
             session()->flash('success', '欢迎回来~');
             //重定向到个人首页，并提示欢迎回来
