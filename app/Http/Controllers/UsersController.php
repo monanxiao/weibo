@@ -18,4 +18,18 @@ class UsersController extends Controller
 
         return view('users.show',compact('user'));
     }
+
+    //接收用户表单
+    public function store(Request $request){
+
+
+        //表单字段验证规则
+        $this->validate($request,[
+            'name' => 'required|unique:users|max:50',
+            'email' => 'required|emai|unique:users|max:255',
+            'password' => 'required|confirmed|min:6'
+        ]);
+
+        return ;
+    }
 }
