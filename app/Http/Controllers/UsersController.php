@@ -8,6 +8,18 @@ use Auth;
 
 class UsersController extends Controller
 {
+    //使用构造方法过滤 用户编辑、更新 操作
+    public function __construct()
+    {
+        $this->middleware('auth', [
+            'except' => ['show', 'create', 'store'] //未登录时可以访问的方法
+        ]);
+
+        $this->middleware('guest', [
+            'only' => ['create'] //只让未登录时访问注册界面
+        ]);
+    }
+
     //注册
     public function create()
     {
@@ -25,7 +37,6 @@ class UsersController extends Controller
     //接收用户表单
     public function store(Request $request)
     {
-
 
         //表单字段验证规则
         $this->validate($request, [
@@ -55,6 +66,8 @@ class UsersController extends Controller
     //编辑用户资料
     public function edit(User $user)
     {
+        //验证授权 调用用户更新授权方法
+        $this->authorize('update', $user);
 
         return view('users.edit', compact('user'));
     }
@@ -62,13 +75,14 @@ class UsersController extends Controller
     //接收用户资料更新数据表单
     public function update(User $user, Request $request)
     {
+        //验证授权 调用用户更新授权方法
+        $this->authorize('update', $user);
+
         //验证提交数据
         $this->validate($request, [
             'name' => 'required|max:50',
             'password' => 'nullable|confirmed|min:6' //允许密码为空
         ]);
-
-
 
         // $user->update([
         //     'name' => $request->name,
@@ -89,6 +103,8 @@ class UsersController extends Controller
         //提醒消息
         session()->flash('success', '个人资料更新成功！');
 
-        return redirect()->route('users.show', $user->id);
+        // return redirect()->route('users.show', [$user]);
+        // return redirect()->route('users.show', $user->id); //同上
+        return redirect()->route('users.show', $user); //同上
     }
 }

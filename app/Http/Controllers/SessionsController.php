@@ -7,6 +7,15 @@ use Auth;
 
 class SessionsController extends Controller
 {
+    //构造方法 过滤已登录 禁止访问登录界面和注册界面
+    public function __construct()
+    {
+        $this->middleware('guest', [
+            'only' => ['create'] //已登录时禁止访问 只允许未登录用户访问方法
+        ]);
+
+    }
+
     //会话界面
     public function create()
     {
@@ -25,10 +34,12 @@ class SessionsController extends Controller
 
         //验证用户信息
         if(Auth::attempt($credentials,$request->has('remember'))) { //第一个参数匹配账号密码，第二个参数保持登录状态
-            //登录成功
+            // 登录成功
             session()->flash('success', '欢迎回来~');
-            //重定向到个人首页，并提示欢迎回来
-            return redirect()->route('users.show', [Auth::user()]);
+            // 默认跳转地址，重定向到个人首页，并提示欢迎回来
+            $fallback = route('users.show', Auth::user());
+            // 重定向到访问地址，假如为空，则跳转到默认地址
+            return redirect()->intended($fallback);
 
         }else{
             //登录失败
