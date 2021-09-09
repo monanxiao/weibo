@@ -49,4 +49,16 @@ Route::post('login', 'SessionsController@store')->name('login');
 Route::delete('login', 'SessionsController@destroy')->name('logout');
 
 // 用户账户激活路由
-Route::get('signup/confirm/{token}','UsersController@confirmEmail')->name('confirm_email');
+Route::get('signup/confirm/{token}', 'UsersController@confirmEmail')->name('confirm_email');
+
+// 重置密码 填写邮箱页面
+Route::get('password/reset', 'PasswordController@showLinkRequestForm')->name('password.request');
+
+// 重置密码 接受邮箱数据
+Route::post('password/email', 'PasswordController@sendResetLinkEmail')->name('password.email');
+
+// 重置密码 填写新密码页面
+Route::get('password/reset/{token}', 'PasswordController@showResetForm')->name('password.reset');
+
+// 重置密码 接收新密码数据
+Route::post('password/reset', 'PasswordController@reset')->name('password.update');
