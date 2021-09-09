@@ -25,4 +25,11 @@ class UserPolicy
         //当前登录用户 全等于 即将授权用户实例ID 授权通过，否则失败。
         return $currentUser->id === $user->id;
     }
+
+    //删除用户操作权限验证
+    public function destroy(User $currentUser, User $user){
+
+        // 首先登录用户是管理员；且删除的不能是自己
+        return $currentUser->is_admin && $currentUser->id !== $user->id;
+    }
 }
