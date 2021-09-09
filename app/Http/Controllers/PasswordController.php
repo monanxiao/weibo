@@ -12,6 +12,16 @@ use Mail;
 
 class PasswordController extends Controller
 {
+
+    //
+    public function __construct()
+    {
+        // 限流 10分钟内 请求3次 找回密码操作
+        $this->middleware('throttle:3,10', [
+            'only' => ['sendResetLinkEmail']
+        ]);
+    }
+
     // 忘记密码页面
     public function showLinkRequestForm()
     {

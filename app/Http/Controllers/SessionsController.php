@@ -14,6 +14,11 @@ class SessionsController extends Controller
             'only' => ['create'] //已登录时禁止访问 只允许未登录用户访问方法
         ]);
 
+        // 登录限流 10分钟10次
+        $this->middleware('throttle:10,10', [
+            'only' => ['store']
+        ]);
+
     }
 
     //会话界面
