@@ -17,19 +17,19 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-//首页
+// 首页
 Route::get('/','StaticPagesController@home')->name('home');
 
-//帮助页
+// 帮助页
 Route::get('/help','StaticPagesController@help')->name('help');
 
-//关于我们
+// 关于我们
 Route::get('/about','StaticPagesController@about')->name('about');
 
-//注册
+// 注册
 Route::get('/signup','UsersController@create')->name('signup');
 
-//用户资源路由
+// 用户资源路由
 Route::resource('/users','UsersController');
 // Route::get('/users', 'UsersController@index')->name('users.index');
 // Route::get('/users/create', 'UsersController@create')->name('users.create');
@@ -42,8 +42,11 @@ Route::resource('/users','UsersController');
 // 用户会话页面
 Route::get('login', 'SessionsController@create')->name('login');
 
-//接受用户会话数据
+// 接受用户会话数据
 Route::post('login', 'SessionsController@store')->name('login');
 
-//销毁用户会话
+// 销毁用户会话
 Route::delete('login', 'SessionsController@destroy')->name('logout');
+
+// 用户账户激活路由
+Route::get('signup/confirm/{token}','UsersController@confirmEmail')->name('confirm_email');

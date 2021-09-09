@@ -33,13 +33,25 @@ class SessionsController extends Controller
         ]);
 
         //验证用户信息
-        if(Auth::attempt($credentials,$request->has('remember'))) { //第一个参数匹配账号密码，第二个参数保持登录状态
-            // 登录成功
-            session()->flash('success', '欢迎回来~');
-            // 默认跳转地址，重定向到个人首页，并提示欢迎回来
-            $fallback = route('users.show', Auth::user());
-            // 重定向到访问地址，假如为空，则跳转到默认地址
-            return redirect()->intended($fallback);
+        if(Auth::attempt($credentials,$request->has('remember'))) { // 第一个参数匹配账号密码，第二个参数保持登录状态
+
+            // 验证用户是否激活
+            if(Auth::user()->activated) {
+
+                // 登录成功
+                session()->flash('success', '欢迎回来~');
+                // 默认跳转地址，重定向到个人首页，并提示欢迎回来
+                $fallback = route('users.show', Auth::user());
+                // 重定向到访问地址，假如为空，则跳转到默认地址
+                return redirect()->intended($fallback);
+
+            }else{
+
+                Auth::logout();// 未激活则提醒 并重定向
+                session()->flash('warning', '你的账号未激活，请检查邮箱中的注册邮件进行激活。');
+                return redirect('/');
+            }
+
 
         }else{
             //登录失败
