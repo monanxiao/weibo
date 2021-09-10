@@ -65,3 +65,10 @@ Route::post('/password/reset', 'PasswordController@reset')->name('password.updat
 
 // 发布微博
 Route::resource('/statuses', 'StatusesController', ['only' => ['store', 'destroy']]);
+
+// 粉丝列表
+Route::get('/users/{user}/followings', 'UsersController@followings')->name('users.followings');
+
+// 关注用户列表
+Route::get('/users/{user}/followers', 'UsersController@followers')->name('users.followers');
+
