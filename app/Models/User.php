@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
+use Auth;
 
 class User extends Authenticatable
 {
@@ -74,8 +75,16 @@ class User extends Authenticatable
     // 倒序显示微博数据
     public function feed()
     {
-        return $this->statuses()
-                    ->orderBy('created_at','desc');
+
+        // 取出当前关注用户的ID并写入数组
+        $user_ids = $this->followings->pluck('id')->toArray();
+        // 当前id 插入尾部
+        array_push($user_id, $this->id);
+
+        // 取出微博内 包含在数组内的内容
+        return Status::whereIn('user_id', $user_ids)
+                        ->with('user')
+                        ->orderBy('created_at','desc');
     }
 
     // 一个用户拥有多个粉丝
@@ -118,7 +127,7 @@ class User extends Authenticatable
     }
 
     // 验证是否已关注当前用户
-    public function isFollowings($user_id){
+    public function isFollowing($user_id){
 
         return $this->followings->contains($user_id);// 验证是否已经包含
     }
