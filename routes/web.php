@@ -72,3 +72,8 @@ Route::get('/users/{user}/followings', 'UsersController@followings')->name('user
 // 关注用户列表
 Route::get('/users/{user}/followers', 'UsersController@followers')->name('users.followers');
 
+// 关注用户
+Route::post('/users/followers/{user}', 'FollowersController@store')->name('followers.store');
+// 取消关注
+Route::delete('/users/followers/{user}', 'FollowersController@destroy')->name('followers.destroy');
+
