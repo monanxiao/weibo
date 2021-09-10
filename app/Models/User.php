@@ -77,4 +77,49 @@ class User extends Authenticatable
         return $this->statuses()
                     ->orderBy('created_at','desc');
     }
+
+    // 一个用户拥有多个粉丝
+    public function followers()
+    {
+        // return $this->belongsToMany(User::class); // 默认表名 user_user
+        // return $this->belongsToMany(User::class, 'followers');// 自定义表名 followers
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id');// 自定义表名，自定义字段名称
+    }
+
+    // 一个粉丝关注的多个用户
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id');
+    }
+
+    // 关注用户
+    public function follow($user_ids)
+    {
+        // 检测是否数组，不是就通过
+        if( ! is_array($user_ids)) {
+            $user_ids = compact('user_ids');
+        }
+
+        // 调用关注方法，并使用sync去重关注
+        $this->followings()->sync($user_ids, false);
+
+    }
+
+    // 取消关注
+    public function unfollow($user_ids)
+    {
+        // 检测是否数组，不是就通过
+        if( ! is_array($user_ids)) {
+            $user_ids = compact('user_ids');
+        }
+
+        // 取消关注用户
+        $this->followings()->detach($user_ids);
+    }
+
+    // 验证是否已关注当前用户
+    public function isFollowings($user_id){
+
+        return $this->followings->contains($user_id);// 验证是否已经包含
+    }
 }
