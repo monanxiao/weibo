@@ -79,7 +79,7 @@ class User extends Authenticatable
         // 取出当前关注用户的ID并写入数组
         $user_ids = $this->followings->pluck('id')->toArray();
         // 当前id 插入尾部
-        array_push($user_id, $this->id);
+        array_push($user_ids, $this->id);
 
         // 取出微博内 包含在数组内的内容
         return Status::whereIn('user_id', $user_ids)
