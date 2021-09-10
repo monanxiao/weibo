@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UsersTableSeeder::class);//执行填充用户
         $this->call(StatusTableSeeder::class);// 填充微博假数据
+        $this->call(FollowersTableSeeder::class);// 生成关注假数据
 
         Model::reguard();
         // \App\Models\User::factory(10)->create();
