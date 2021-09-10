@@ -26,27 +26,32 @@ class UsersController extends Controller
         ]);
     }
 
-    //用户列表
+    // 用户列表
     public function index()
     {
         // $users = User::all();
-        $users = User::paginate(6);//分页
+        $users = User::paginate(6);// 分页
 
         return view('users.index', compact('users'));
     }
 
-    //注册
+    // 注册
     public function create()
     {
 
         return view('users.create');
     }
 
-    //获取用户信息
+    // 获取用户信息
     public function show(User $user)
     {
 
-        return view('users.show',compact('user'));
+        // 取出当前用户的所有微博
+        $statuses = $user->statuses()
+                        ->orderBy('created_at','desc')
+                        ->paginate(10);
+
+        return view('users.show',compact('user','statuses'));
     }
 
     // 接收用户表单
