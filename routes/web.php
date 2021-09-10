@@ -40,25 +40,28 @@ Route::resource('/users','UsersController');
 // Route::delete('/users/{user}', 'UsersController@destroy')->name('users.destroy');
 
 // 用户会话页面
-Route::get('login', 'SessionsController@create')->name('login');
+Route::get('/login', 'SessionsController@create')->name('login');
 
 // 接受用户会话数据
-Route::post('login', 'SessionsController@store')->name('login');
+Route::post('/login', 'SessionsController@store')->name('login');
 
 // 销毁用户会话
-Route::delete('login', 'SessionsController@destroy')->name('logout');
+Route::delete('/login', 'SessionsController@destroy')->name('logout');
 
 // 用户账户激活路由
-Route::get('signup/confirm/{token}', 'UsersController@confirmEmail')->name('confirm_email');
+Route::get('/signup/confirm/{token}', 'UsersController@confirmEmail')->name('confirm_email');
 
 // 重置密码 填写邮箱页面
-Route::get('password/reset', 'PasswordController@showLinkRequestForm')->name('password.request');
+Route::get('/password/reset', 'PasswordController@showLinkRequestForm')->name('password.request');
 
 // 重置密码 接受邮箱数据
-Route::post('password/email', 'PasswordController@sendResetLinkEmail')->name('password.email');
+Route::post('/password/email', 'PasswordController@sendResetLinkEmail')->name('password.email');
 
 // 重置密码 填写新密码页面
-Route::get('password/reset/{token}', 'PasswordController@showResetForm')->name('password.reset');
+Route::get('/password/reset/{token}', 'PasswordController@showResetForm')->name('password.reset');
 
 // 重置密码 接收新密码数据
-Route::post('password/reset', 'PasswordController@reset')->name('password.update');
+Route::post('/password/reset', 'PasswordController@reset')->name('password.update');
+
+// 发布微博
+Route::resource('/statuses', 'StatusesController', ['only' => ['store', 'destroy']]);
